@@ -1,7 +1,8 @@
-import pygame
-import sys
-import random
 import math
+import random
+import sys
+
+import pygame
 
 # Inisialisasi Pygame
 pygame.init()
@@ -21,6 +22,7 @@ GREY = (200, 200, 200)
 # Font
 FONT = pygame.font.SysFont("consolas", 32)
 
+
 class Paddle:
     def __init__(self, x, y, width, height, speed=7):
         self.rect = pygame.Rect(x, y, width, height)
@@ -37,14 +39,12 @@ class Paddle:
         if self.rect.bottom > SCREEN_HEIGHT:
             self.rect.bottom = SCREEN_HEIGHT
 
+
 class Ball:
     def __init__(self, size=14, base_speed=6.0, max_angle_deg=45):
         self.size = size
         self.rect = pygame.Rect(
-            SCREEN_WIDTH // 2 - size // 2,
-            SCREEN_HEIGHT // 2 - size // 2,
-            size,
-            size
+            SCREEN_WIDTH // 2 - size // 2, SCREEN_HEIGHT // 2 - size // 2, size, size
         )
         self.base_speed = base_speed
         self.speed = base_speed
@@ -119,14 +119,18 @@ class Ball:
     def draw(self, surface):
         pygame.draw.rect(surface, WHITE, self.rect)
 
+
 def draw_center_line(surface):
     dash_height = 10
     gap = 10
     x = SCREEN_WIDTH // 2
     y = 0
     while y < SCREEN_HEIGHT:
-        pygame.draw.line(surface, GREY, (x, y), (x, min(y + dash_height, SCREEN_HEIGHT)), 2)
+        pygame.draw.line(
+            surface, GREY, (x, y), (x, min(y + dash_height, SCREEN_HEIGHT)), 2
+        )
         y += dash_height + gap
+
 
 def ai_move(ai_paddle: Paddle, ball: Ball):
     # AI sederhana: kejar pusat Y bola dengan kecepatan terbatas
@@ -137,6 +141,7 @@ def ai_move(ai_paddle: Paddle, ball: Ball):
     elif paddle_center > target_y + 4:
         ai_paddle.move(-ai_paddle.speed)
     # batas layar ditangani oleh move()
+
 
 def main():
     # Objek permainan
@@ -149,14 +154,14 @@ def main():
         y=SCREEN_HEIGHT // 2 - paddle_height // 2,
         width=paddle_width,
         height=paddle_height,
-        speed=player_speed
+        speed=player_speed,
     )
     right_paddle = Paddle(
         x=SCREEN_WIDTH - 30 - paddle_width,
         y=SCREEN_HEIGHT // 2 - paddle_height // 2,
         width=paddle_width,
         height=paddle_height,
-        speed=ai_speed
+        speed=ai_speed,
     )
     ball = Ball(size=14, base_speed=6.0, max_angle_deg=45)
 
@@ -188,7 +193,7 @@ def main():
         scorer = ball.update(left_paddle, right_paddle)
         if scorer == "left":
             score_left += 1
-            ball.reset(start_to_right=True)   # servis dari kiri ke kanan
+            ball.reset(start_to_right=True)  # servis dari kiri ke kanan
         elif scorer == "right":
             score_right += 1
             ball.reset(start_to_right=False)  # servis dari kanan ke kiri
@@ -218,6 +223,7 @@ def main():
 
     pygame.quit()
     sys.exit()
+
 
 if __name__ == "__main__":
     main()
